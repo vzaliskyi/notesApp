@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val action: () -> Unit = {
-            goToNoteDetailActivity()
+        val action: (Int) -> Unit = {
+            goToNoteDetailActivity(it)
         }
 
         val notesAdapter = NotesListAdapter(this, action)
@@ -36,7 +36,9 @@ class MainActivity : AppCompatActivity() {
         notesAdapter.submitList(notesList)
     }
 
-    private fun goToNoteDetailActivity(){
-
+    private fun goToNoteDetailActivity(id: Int){
+        val intent = Intent(this, NoteDetailActivity::class.java)
+        intent.putExtra("id", id)
+        startActivity(intent)
     }
 }

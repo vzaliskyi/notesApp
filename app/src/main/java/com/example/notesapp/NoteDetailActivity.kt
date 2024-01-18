@@ -13,5 +13,8 @@ class NoteDetailActivity: AppCompatActivity() {
 
         binding = ActivityNoteDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val noteId = intent.extras!!.getInt("id")
+        binding.noteTextView.text = getString(noteId)
     }
 }

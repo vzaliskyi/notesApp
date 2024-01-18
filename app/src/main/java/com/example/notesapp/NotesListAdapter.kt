@@ -1,16 +1,14 @@
 package com.example.notesapp
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notesapp.databinding.NoteItemBinding
-import kotlinx.coroutines.NonDisposableHandle.parent
 
-class NotesListAdapter(private val context: Context, private val onNoteClicked:() -> Unit)
+class NotesListAdapter(private val context: Context, private val onNoteClicked:(Int) -> Unit)
     : ListAdapter<Int, NotesListAdapter.NoteViewHolder>(DiffCallback) {
 
     companion object {
@@ -33,24 +31,22 @@ class NotesListAdapter(private val context: Context, private val onNoteClicked:(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        //Log.d("MainActivity", "View Holder was created.")
-        val noteViewHolder =  NoteViewHolder(
+
+        return NoteViewHolder(
             NoteItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
         )
-
-        noteViewHolder.itemView.setOnClickListener(){
-            onNoteClicked.invoke()
-        }
-
-        return noteViewHolder
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        //Log.d("MainActivity", "${getItem(position)}")
+
+        holder.itemView.setOnClickListener(){
+            onNoteClicked.invoke(getItem(position))
+        }
+
         holder.bind(context.getString(getItem(position)))
     }
 }
