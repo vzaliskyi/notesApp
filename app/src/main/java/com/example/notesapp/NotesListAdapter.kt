@@ -8,17 +8,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notesapp.databinding.NoteItemBinding
+import kotlinx.coroutines.NonDisposableHandle.parent
 
-class NotesListAdapter()
-    : ListAdapter<String, NotesListAdapter.NoteViewHolder>(DiffCallback) {
+class NotesListAdapter(private val context: Context, private val onNoteClicked:() -> Unit)
+    : ListAdapter<Int, NotesListAdapter.NoteViewHolder>(DiffCallback) {
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<String>() {
-            override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+        private val DiffCallback = object : DiffUtil.ItemCallback<Int>() {
+            override fun areItemsTheSame(oldItem: Int, newItem: Int): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+            override fun areContentsTheSame(oldItem: Int, newItem: Int): Boolean {
                 return oldItem == newItem
             }
         }
@@ -32,17 +33,24 @@ class NotesListAdapter()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        Log.d("MainActivity", "View Holder was created.")
-        return NoteViewHolder(
+        //Log.d("MainActivity", "View Holder was created.")
+        val noteViewHolder =  NoteViewHolder(
             NoteItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
         )
+
+        noteViewHolder.itemView.setOnClickListener(){
+            onNoteClicked.invoke()
+        }
+
+        return noteViewHolder
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        //Log.d("MainActivity", "${getItem(position)}")
+        holder.bind(context.getString(getItem(position)))
     }
 }
