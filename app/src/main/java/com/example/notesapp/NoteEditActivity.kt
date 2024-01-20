@@ -3,15 +3,17 @@ package com.example.notesapp
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.notesapp.data.Note
 import com.example.notesapp.data.notesList
 import com.example.notesapp.databinding.ActivityNoteEditBinding
+import com.example.notesapp.viewmodels.NoteEditViewModel
 
 class NoteEditActivity:AppCompatActivity() {
 
     private lateinit var binding: ActivityNoteEditBinding
-    private lateinit var note: Note
+    private val viewModel: NoteEditViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,8 +23,9 @@ class NoteEditActivity:AppCompatActivity() {
         setSupportActionBar(binding.appToolbar)
 
         val noteId = intent.extras!!.getInt("id")
-        note = notesList.first { it.id == noteId }
-        binding.noteEditText.setText(note.noteText)
+        viewModel.findNote(noteId)
+
+        binding.noteEditText.setText(viewModel.note.noteText)
 
         binding.appToolbar.setNavigationOnClickListener {
             finish()
@@ -47,7 +50,7 @@ class NoteEditActivity:AppCompatActivity() {
 
     private fun saveNote(){
         val newNoteText = binding.noteEditText.text.toString()
-        note.noteText = newNoteText
+        viewModel.setNewText(newNoteText)
         finish()
     }
 }

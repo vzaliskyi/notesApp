@@ -7,10 +7,13 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.example.notesapp.data.Note
 import com.example.notesapp.data.idCount
 import com.example.notesapp.data.notesList
 import com.example.notesapp.databinding.ActivityMainBinding
+import com.example.notesapp.viewmodels.MainViewModel
+
 //import android.content.Context
 //import androidx.core.content.ContextCompat
 
@@ -18,13 +21,7 @@ import com.example.notesapp.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private val notesText: List<Int> = listOf(
-        R.string.note1_text,
-        R.string.note2_text,
-        R.string.note3_text,
-        R.string.note4_text,
-        R.string.note5_text,
-    )
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +30,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.appToolbar)
 
-        generateStartList()
-
+        viewModel.generateStartList(this)
 
         val action: (Int) -> Unit = {
             goToNoteDetailActivity(it)
@@ -51,10 +47,4 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun generateStartList(){
-        for(note in notesText){
-            idCount += 1
-            notesList.add(Note(idCount, getString(note), false))
-        }
-    }
 }
