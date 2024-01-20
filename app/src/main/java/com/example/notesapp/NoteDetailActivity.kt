@@ -1,6 +1,8 @@
 package com.example.notesapp
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.notesapp.data.Note
 import com.example.notesapp.data.notesList
@@ -22,8 +24,18 @@ class NoteDetailActivity: AppCompatActivity() {
         note = notesList.filter { it.id == noteId }.first()
         binding.noteTextView.text = note.noteText
 
+        binding.noteTextView.setOnClickListener {
+            goToNoteEditActivity(noteId)
+        }
+
         binding.appToolbar.setNavigationOnClickListener {
             finish()
         }
+    }
+
+    private fun goToNoteEditActivity(id: Int){
+        val intent = Intent(this, NoteEditActivity::class.java)
+        intent.putExtra("id", id)
+        startActivity(intent)
     }
 }
