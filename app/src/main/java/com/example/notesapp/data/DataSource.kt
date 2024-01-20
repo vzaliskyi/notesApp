@@ -2,6 +2,6 @@ package com.example.notesapp.data
 
 import kotlinx.coroutines.flow.Flow
 
-var idCount = 0
+var ID_COUNT = 0
 
-var notesList: MutableList<Note> = mutableListOf()
+var NOTES_LIST: MutableList<Note> = mutableListOf()

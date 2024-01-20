@@ -26,7 +26,9 @@ class MainActivity : AppCompatActivity() {
 
         setUpRecyclerView()
 
-
+        binding.createButton.setOnClickListener {
+            createNewActivity()
+        }
 
     }
 
@@ -48,6 +50,11 @@ class MainActivity : AppCompatActivity() {
     private fun goToNoteDetailActivity(id: Int){
         val intent = Intent(this, NoteDetailActivity::class.java)
         intent.putExtra("id", id)
+        startActivity(intent)
+    }
+
+    private fun createNewActivity(){
+        val intent = Intent(this, NoteEditActivity::class.java)
         startActivity(intent)
     }
 

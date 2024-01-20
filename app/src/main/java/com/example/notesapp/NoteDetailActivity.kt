@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.notesapp.data.Note
-import com.example.notesapp.data.notesList
 import com.example.notesapp.databinding.ActivityNoteDetailBinding
 import com.example.notesapp.viewmodels.NoteDetailViewModel
 
@@ -45,8 +43,6 @@ class NoteDetailActivity: AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.setNoteText()
-        Log.d("MainActivity", "NoteText: ${viewModel.noteText.value}")
-        Log.d("MainActivity", "Note:${viewModel._note}")
     }
 
     private fun goToNoteEditActivity(id: Int){

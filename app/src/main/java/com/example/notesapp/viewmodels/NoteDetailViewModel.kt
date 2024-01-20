@@ -3,8 +3,8 @@ package com.example.notesapp.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.notesapp.data.NOTES_LIST
 import com.example.notesapp.data.Note
-import com.example.notesapp.data.notesList
 
 class NoteDetailViewModel:ViewModel() {
 
@@ -24,7 +24,7 @@ class NoteDetailViewModel:ViewModel() {
 
 
     private fun findNote(id: Int): Note{
-        return notesList.first { it.id == id }
+        return NOTES_LIST.first { it.id == id }
     }
 
     fun assignNoteToMutableLiveData(id:Int){

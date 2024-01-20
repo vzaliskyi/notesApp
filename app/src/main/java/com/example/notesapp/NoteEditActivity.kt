@@ -20,8 +20,17 @@ class NoteEditActivity:AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.appToolbar)
 
-        val noteId = intent.extras!!.getInt("id")
-        viewModel.findNote(noteId)
+        /* I'm trying to get id of passed note
+        If i didn't passed id, it's mean that user want create new note
+        * */
+        try {
+            val noteId = intent.extras!!.getInt("id")
+            viewModel.findNote(noteId)
+        }
+        catch(e: NullPointerException){
+            viewModel.createNewNote()
+        }
+
 
         binding.noteEditText.setText(viewModel.note.noteText)
 
