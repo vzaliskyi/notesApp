@@ -5,8 +5,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.notesapp.data.Note
-import com.example.notesapp.data.notesList
 import com.example.notesapp.databinding.ActivityNoteEditBinding
 import com.example.notesapp.viewmodels.NoteEditViewModel
 

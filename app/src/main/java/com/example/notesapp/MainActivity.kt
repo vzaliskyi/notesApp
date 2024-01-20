@@ -3,19 +3,11 @@ package com.example.notesapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.viewModels
-import com.example.notesapp.data.Note
-import com.example.notesapp.data.idCount
-import com.example.notesapp.data.notesList
+import androidx.lifecycle.coroutineScope
 import com.example.notesapp.databinding.ActivityMainBinding
 import com.example.notesapp.viewmodels.MainViewModel
-
-//import android.content.Context
-//import androidx.core.content.ContextCompat
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
@@ -32,13 +24,25 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.generateStartList(this)
 
+        setUpRecyclerView()
+
+
+
+    }
+
+    private fun setUpRecyclerView(){
         val action: (Int) -> Unit = {
             goToNoteDetailActivity(it)
         }
 
         val notesAdapter = NotesListAdapter(this, action)
         binding.notesRecyclerView.adapter = notesAdapter
-        notesAdapter.submitList(notesList)
+        //notesAdapter.submitList(notesList)
+        lifecycle.coroutineScope.launch {
+            viewModel.notesListViewModel.collect(){
+                notesAdapter.submitList(it)
+            }
+        }
     }
 
     private fun goToNoteDetailActivity(id: Int){

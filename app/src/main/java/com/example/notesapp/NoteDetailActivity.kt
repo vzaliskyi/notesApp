@@ -14,7 +14,6 @@ class NoteDetailActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityNoteDetailBinding
 
-
     private val viewModel: NoteDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,9 +23,11 @@ class NoteDetailActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         val noteId = intent.extras!!.getInt("id")
-        viewModel.findNote(noteId)
+        viewModel.assignNoteToMutableLiveData(noteId)
 
-        binding.noteTextView.text = viewModel.note.noteText
+        viewModel.noteText.observe(this){
+            binding.noteTextView.text = it
+        }
 
         binding.noteTextView.setOnClickListener {
             goToNoteEditActivity(noteId)
@@ -35,6 +36,17 @@ class NoteDetailActivity: AppCompatActivity() {
         binding.appToolbar.setNavigationOnClickListener {
             finish()
         }
+    }
+
+    /*I use noteText variable in viewModel to display text on screen.
+    Because note text can be updated in NoteEditActivity, I set text
+    in method onResume to sure that changes will be display in NoteDetailActivity
+    * */
+    override fun onResume() {
+        super.onResume()
+        viewModel.setNoteText()
+        Log.d("MainActivity", "NoteText: ${viewModel.noteText.value}")
+        Log.d("MainActivity", "Note:${viewModel._note}")
     }
 
     private fun goToNoteEditActivity(id: Int){

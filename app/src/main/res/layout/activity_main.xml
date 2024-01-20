@@ -10,13 +10,12 @@
         android:id="@+id/appToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:elevation="4dp"
         android:background="?attr/colorPrimary"
-        app:title="@string/app_name"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
+        app:title="@string/app_name" />
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -25,10 +24,10 @@
         android:layout_height="0dp"
         android:padding="4dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/appToolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appToolbar"
         tools:listitem="@layout/note_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
