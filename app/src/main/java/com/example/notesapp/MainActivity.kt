@@ -7,6 +7,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.example.notesapp.data.Note
+import com.example.notesapp.data.idCount
+import com.example.notesapp.data.notesList
 import com.example.notesapp.databinding.ActivityMainBinding
 //import android.content.Context
 //import androidx.core.content.ContextCompat
@@ -15,7 +18,7 @@ import com.example.notesapp.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private val notesList: List<Int> = listOf(
+    private val notesText: List<Int> = listOf(
         R.string.note1_text,
         R.string.note2_text,
         R.string.note3_text,
@@ -29,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.appToolbar)
+
+        generateStartList()
 
 
         val action: (Int) -> Unit = {
@@ -44,5 +49,12 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, NoteDetailActivity::class.java)
         intent.putExtra("id", id)
         startActivity(intent)
+    }
+
+    private fun generateStartList(){
+        for(note in notesText){
+            idCount += 1
+            notesList.add(Note(idCount, getString(note), false))
+        }
     }
 }
