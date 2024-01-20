@@ -16,5 +16,9 @@ class NoteDetailActivity: AppCompatActivity() {
 
         val noteId = intent.extras!!.getInt("id")
         binding.noteTextView.text = getString(noteId)
+
+        binding.appToolbar.setNavigationOnClickListener {
+            finish()
+        }
     }
 }

@@ -5,12 +5,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <include
-        android:id="@+id/toolBar"
-        layout="@layout/toolbar_main"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/appToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp"
+        android:background="?attr/colorPrimary"
+        app:title="@string/app_name"
+        app:navigationIcon="@drawable/ic_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -18,7 +24,7 @@
         android:layout_margin="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolBar"
+        app:layout_constraintTop_toBottomOf="@id/appToolbar"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
