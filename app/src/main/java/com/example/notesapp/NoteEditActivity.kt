@@ -2,6 +2,7 @@ package com.example.notesapp
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.example.notesapp.data.Note
 import com.example.notesapp.data.notesList
@@ -17,10 +18,11 @@ class NoteEditActivity:AppCompatActivity() {
 
         binding = ActivityNoteEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.appToolbar)
 
         val noteId = intent.extras!!.getInt("id")
         note = notesList.first { it.id == noteId }
-        binding.noteTextView.setText(note.noteText)
+        binding.noteEditText.setText(note.noteText)
 
         binding.appToolbar.setNavigationOnClickListener {
             finish()
@@ -30,5 +32,22 @@ class NoteEditActivity:AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.edit_menu, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.saveItem -> {
+                saveNote()
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+
+    }
+
+    private fun saveNote(){
+        val newNoteText = binding.noteEditText.text.toString()
+        note.noteText = newNoteText
+        finish()
     }
 }

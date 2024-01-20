@@ -28,7 +28,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <EditText
-            android:id="@+id/noteTextView"
+            android:id="@+id/noteEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textSize="20sp"
