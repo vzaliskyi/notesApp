@@ -7,6 +7,7 @@ import com.example.notesapp.data.Note
 
 class NoteEditViewModel: ViewModel() {
     private lateinit var _note: Note
+    private var isNewNote: Boolean = false
 
     val note get() = _note
 
@@ -16,13 +17,17 @@ class NoteEditViewModel: ViewModel() {
 
     fun setNewText(newText: String){
         _note.noteText = newText
+        if (isNewNote) saveNewNote()
     }
 
     fun createNewNote(){
         ID_COUNT += 1
-        val newNote = Note(ID_COUNT, "", false)
-        NOTES_LIST.add(newNote)
+        _note = Note(ID_COUNT, "", false)
+        isNewNote = true
 
-        findNote(ID_COUNT)
+    }
+
+    private fun saveNewNote(){
+        NOTES_LIST.add(_note)
     }
 }

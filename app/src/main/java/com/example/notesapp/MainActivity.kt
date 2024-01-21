@@ -4,16 +4,16 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.lifecycle.coroutineScope
 import com.example.notesapp.databinding.ActivityMainBinding
 import com.example.notesapp.viewmodels.MainViewModel
-import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val viewModel: MainViewModel by viewModels()
+
+    private lateinit var notesAdapter: NotesListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,13 +22,33 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.appToolbar)
 
-        viewModel.generateStartList(this)
+
 
         setUpRecyclerView()
+
+        viewModel.generateStartList(this)
 
         binding.createButton.setOnClickListener {
             createNewActivity()
         }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        /* List adapter suggest that submitted list should be different each time.
+        Variable of list don't contain actually list but address of list in memory.
+        So if we call submitList, it compare address of previous list with address of submitted list.
+        If addresses are the same, submitList don't call DiffCallback(don't compare lists).
+        So that's why i create new list and copy notes lists to get submitList work properly
+        * */
+        val tempList = viewModel.notesList.toList()
+
+        /* I call submitList in onStart method to make sure that listAdapter will be updated
+        when i return from NoteDetailActivity and NoteEditActivity
+        * */
+        notesAdapter.submitList(tempList)
 
     }
 
@@ -37,14 +57,10 @@ class MainActivity : AppCompatActivity() {
             goToNoteDetailActivity(it)
         }
 
-        val notesAdapter = NotesListAdapter(this, action)
+        notesAdapter = NotesListAdapter(this, action)
         binding.notesRecyclerView.adapter = notesAdapter
-        //notesAdapter.submitList(notesList)
-        lifecycle.coroutineScope.launch {
-            viewModel.notesListViewModel.collect(){
-                notesAdapter.submitList(it)
-            }
-        }
+
+
     }
 
     private fun goToNoteDetailActivity(id: Int){

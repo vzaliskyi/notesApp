@@ -10,25 +10,26 @@ import com.example.notesapp.data.Note
 import com.example.notesapp.databinding.NoteItemBinding
 
 class NotesListAdapter(private val context: Context, private val onNoteClicked:(Int) -> Unit)
-    : ListAdapter<Note, NotesListAdapter.NoteViewHolder>(DiffCallback) {
+    : ListAdapter<Note, NotesListAdapter.NoteViewHolder>(DiffCallback()) {
 
-    companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<Note>() {
-            override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
-                return oldItem.id == newItem.id
-            }
 
-            override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
-                return oldItem == newItem
-            }
+    class DiffCallback: DiffUtil.ItemCallback<Note>(){
+        override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
+            return oldItem.id == newItem.id
         }
+
+        override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
+            return oldItem == newItem
+        }
+
     }
 
-    class NoteViewHolder(private var binding: NoteItemBinding):RecyclerView.ViewHolder(binding.root){
+    class NoteViewHolder(private var binding: NoteItemBinding): RecyclerView.ViewHolder(binding.root){
 
-        fun bind(note: String){
-            binding.noteTextView.text = note
+        fun bind(noteText: String){
+            binding.noteTextView.text = noteText
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
@@ -43,11 +44,12 @@ class NotesListAdapter(private val context: Context, private val onNoteClicked:(
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+        val note = getItem(position)
 
         holder.itemView.setOnClickListener(){
-            onNoteClicked.invoke(getItem(position).id)
+            onNoteClicked.invoke(note.id)
         }
 
-        holder.bind(getItem(position).noteText)
+        holder.bind(note.noteText)
     }
 }

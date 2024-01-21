@@ -1,5 +1,6 @@
 package com.example.notesapp.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +14,7 @@ class NoteDetailViewModel:ViewModel() {
     * Than in onCreate method in NoteDetailActivity I get noteId
     * And invoke method assignNoteToMutableLiveDate to assign correct data
     * Refactor: remove duplicate invoke of method findNote*/
-    var _note: Note = findNote(1)
+    var note: Note = NOTES_LIST[0]
 
     private var _noteText: MutableLiveData<String> = MutableLiveData("")
     private var _isSelected: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -28,11 +29,16 @@ class NoteDetailViewModel:ViewModel() {
     }
 
     fun assignNoteToMutableLiveData(id:Int){
-        _note = findNote(id)
+        note = findNote(id)
     }
 
     fun setNoteText(){
-        _noteText.postValue(_note.noteText)
+        _noteText.postValue(note.noteText)
+    }
+
+    fun deleteNote(){
+        Log.d("MainActivity", "Removed note: $note")
+        NOTES_LIST.remove(note)
     }
 
 }
