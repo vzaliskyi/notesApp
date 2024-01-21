@@ -1,6 +1,5 @@
 package com.example.notesapp.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,19 +12,21 @@ class NoteDetailViewModel:ViewModel() {
     * That's why I assign random note to _note variable
     * Than in onCreate method in NoteDetailActivity I get noteId
     * And invoke method assignNoteToMutableLiveDate to assign correct data
-    * Refactor: remove duplicate invoke of method findNote*/
+    * */
     var note: Note = NOTES_LIST[0]
 
     private var _noteText: MutableLiveData<String> = MutableLiveData("")
-    private var _isSelected: MutableLiveData<Boolean> = MutableLiveData(false)
+    private var _isSelected: Boolean = false
 
     val noteText: LiveData<String> = _noteText
-    val isSelected: LiveData<Boolean> get() = _isSelected
+    val isSelected: Boolean get() = _isSelected
 
 
 
     private fun findNote(id: Int): Note{
-        return NOTES_LIST.first { it.id == id }
+        val currentNote = NOTES_LIST.first { it.id == id }
+        _isSelected = currentNote.isSelected
+        return currentNote
     }
 
     fun assignNoteToMutableLiveData(id:Int){
@@ -37,8 +38,12 @@ class NoteDetailViewModel:ViewModel() {
     }
 
     fun deleteNote(){
-        Log.d("MainActivity", "Removed note: $note")
         NOTES_LIST.remove(note)
+    }
+
+    fun selectNote(){
+        _isSelected = !_isSelected
+        NOTES_LIST.first{it == note}.isSelected = isSelected
     }
 
 }

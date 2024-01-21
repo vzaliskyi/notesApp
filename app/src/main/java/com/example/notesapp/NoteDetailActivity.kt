@@ -75,7 +75,9 @@ class NoteDetailActivity: AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
         menuInflater.inflate(R.menu.detail_menu, menu)
+        menu!!.findItem(R.id.selectItem).setIcon(getSelectIcon())
         return true
     }
 
@@ -85,9 +87,20 @@ class NoteDetailActivity: AppCompatActivity() {
                 dialog.show()
                 return true
             }
+            R.id.selectItem -> {
+                viewModel.selectNote()
+
+                item.setIcon(getSelectIcon())
+
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
 
+    }
 
+    private fun getSelectIcon(): Int{
+        return if (viewModel.isSelected) R.drawable.ic_selected
+        else R.drawable.ic_unselected
     }
 }

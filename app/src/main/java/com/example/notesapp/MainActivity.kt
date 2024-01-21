@@ -3,6 +3,7 @@ package com.example.notesapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import com.example.notesapp.databinding.ActivityMainBinding
 import com.example.notesapp.viewmodels.MainViewModel
@@ -44,6 +45,10 @@ class MainActivity : AppCompatActivity() {
         So that's why i create new list and copy notes lists to get submitList work properly
         * */
         val tempList = viewModel.notesList.toList()
+
+        tempList.forEach {
+            Log.d("MainActivity", "Note: $it")
+        }
 
         /* I call submitList in onStart method to make sure that listAdapter will be updated
         when i return from NoteDetailActivity and NoteEditActivity

@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_cancel"
-        app:title="@string/app_name" />
+        app:title="Edit note" />
 
 
     <com.google.android.material.card.MaterialCardView
