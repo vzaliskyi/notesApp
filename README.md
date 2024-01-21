@@ -34,7 +34,7 @@ App contains 3 activities: MainActivity, NoteDetailActivity, NoteEditActivity
 3. Add filter by tags and select value
 4. Connect database to app
 5. Refactor code
-6. Polish UI/UE
+6. Polish UI/UX
 
 ## Screenshots
 <img src="https://github.com/vzaliskyi/notesApp/assets/78689702/d05512ec-a8d8-4d4e-a498-e0973af2bd0f" alt="MainActivity" width="250">
