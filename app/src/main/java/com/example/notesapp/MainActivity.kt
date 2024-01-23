@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.example.notesapp.data.MenuItems
 import com.example.notesapp.databinding.ActivityMainBinding
 import com.example.notesapp.viewmodels.MainViewModel
 import com.google.android.material.navigation.NavigationView
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         setUpDrawerMenu()
 
-        //viewModel.generateStartList(this)
+        viewModel.generateStartList(this)
 
         binding.createButton.setOnClickListener {
             createNewActivity()
@@ -52,16 +53,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         If addresses are the same, submitList don't call DiffCallback(don't compare lists).
         So that's why i create new list and copy notes lists to get submitList work properly
         * */
-        val tempList = viewModel.notesList.toList()
-
-        tempList.forEach {
-            Log.d("MainActivity", "Note: $it")
+        if(viewModel.selectedMenuItem == MenuItems.ALL){
+            val tempList = viewModel.notesList.toList()
+            notesAdapter.submitList(tempList)
         }
+        else{
+            notesAdapter.submitList(viewModel.filterNotesBySelected())
+        }
+
 
         /* I call submitList in onStart method to make sure that listAdapter will be updated
         when i return from NoteDetailActivity and NoteEditActivity
         * */
-        notesAdapter.submitList(tempList)
+
 
     }
 
@@ -98,8 +102,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.allNotesItem -> Toast.makeText(this, "All notes item clicked", Toast.LENGTH_SHORT).show()
-            R.id.selectedNotesItem -> Toast.makeText(this, "Selected notes item clicked", Toast.LENGTH_SHORT).show()
+            R.id.allNotesItem -> {
+                val tempList = viewModel.notesList.toList()
+                notesAdapter.submitList(tempList)
+                viewModel.selectedMenuItem = MenuItems.ALL
+            }
+            R.id.selectedNotesItem -> {
+                notesAdapter.submitList(viewModel.filterNotesBySelected())
+                viewModel.selectedMenuItem = MenuItems.SELECT
+            }
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
