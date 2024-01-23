@@ -4,12 +4,18 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.example.notesapp.databinding.ActivityMainBinding
 import com.example.notesapp.viewmodels.MainViewModel
+import com.google.android.material.navigation.NavigationView
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var binding: ActivityMainBinding
 
     private val viewModel: MainViewModel by viewModels()
@@ -27,7 +33,9 @@ class MainActivity : AppCompatActivity() {
 
         setUpRecyclerView()
 
-        viewModel.generateStartList(this)
+        setUpDrawerMenu()
+
+        //viewModel.generateStartList(this)
 
         binding.createButton.setOnClickListener {
             createNewActivity()
@@ -65,7 +73,16 @@ class MainActivity : AppCompatActivity() {
         notesAdapter = NotesListAdapter(this, action)
         binding.notesRecyclerView.adapter = notesAdapter
 
+    }
 
+    private fun setUpDrawerMenu(){
+        binding.navMenu.setNavigationItemSelectedListener(this)
+
+        val toggle = ActionBarDrawerToggle(
+            this, binding.drawerLayout,binding.appToolbar, R.string.open_nav, R.string.close_nav)
+
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
     }
 
     private fun goToNoteDetailActivity(id: Int){
@@ -77,6 +94,15 @@ class MainActivity : AppCompatActivity() {
     private fun createNewActivity(){
         val intent = Intent(this, NoteEditActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.allNotesItem -> Toast.makeText(this, "All notes item clicked", Toast.LENGTH_SHORT).show()
+            R.id.selectedNotesItem -> Toast.makeText(this, "Selected notes item clicked", Toast.LENGTH_SHORT).show()
+        }
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 
 }
