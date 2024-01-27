@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.notesapp.data.Note
+import com.example.notesapp.database.entities.Note
 import com.example.notesapp.databinding.NoteItemBinding
 
 class NotesListAdapter(private val context: Context, private val onNoteClicked:(Int) -> Unit)
@@ -15,7 +15,7 @@ class NotesListAdapter(private val context: Context, private val onNoteClicked:(
 
     class DiffCallback: DiffUtil.ItemCallback<Note>(){
         override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.noteId == newItem.noteId
         }
 
         override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
@@ -47,9 +47,9 @@ class NotesListAdapter(private val context: Context, private val onNoteClicked:(
         val note = getItem(position)
 
         holder.itemView.setOnClickListener(){
-            onNoteClicked.invoke(note.id)
+            onNoteClicked.invoke(note.noteId)
         }
 
-        holder.bind(note.noteText)
+        holder.bind(note.text)
     }
 }
