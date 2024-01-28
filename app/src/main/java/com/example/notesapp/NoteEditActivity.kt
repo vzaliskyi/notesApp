@@ -5,13 +5,19 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.notesapp.database.NoteDatabase
 import com.example.notesapp.databinding.ActivityNoteEditBinding
+import com.example.notesapp.viewmodels.NoteEditModelFactory
 import com.example.notesapp.viewmodels.NoteEditViewModel
 
 class NoteEditActivity:AppCompatActivity() {
 
     private lateinit var binding: ActivityNoteEditBinding
-    private val viewModel: NoteEditViewModel by viewModels()
+    private val viewModel: NoteEditViewModel by viewModels(){
+        NoteEditModelFactory(
+            NoteDatabase.getInstance(this).noteDao
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +38,7 @@ class NoteEditActivity:AppCompatActivity() {
         }
 
 
-        binding.noteEditText.setText(viewModel.note.noteText)
+        binding.noteEditText.setText(viewModel.note.text)
 
         binding.appToolbar.setNavigationOnClickListener {
             finish()

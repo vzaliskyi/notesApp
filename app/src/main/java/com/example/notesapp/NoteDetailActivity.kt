@@ -2,21 +2,29 @@ package com.example.notesapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.notesapp.database.NoteDatabase
 import com.example.notesapp.databinding.ActivityNoteDetailBinding
+import com.example.notesapp.viewmodels.NoteDetailModelFactory
 import com.example.notesapp.viewmodels.NoteDetailViewModel
+
 
 class NoteDetailActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityNoteDetailBinding
     private lateinit var dialog: AlertDialog
 
-    private val viewModel: NoteDetailViewModel by viewModels()
+    private var noteId: Int = 0
+
+    private val viewModel: NoteDetailViewModel by viewModels(){
+        NoteDetailModelFactory(
+            NoteDatabase.getInstance(this).noteDao
+        )
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,10 +34,10 @@ class NoteDetailActivity: AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.appToolbar)
 
-        val noteId = intent.extras!!.getInt("id")
-        viewModel.assignNoteToMutableLiveData(noteId)
+        noteId = intent.extras!!.getInt("id")
 
         createDialog()
+
 
         viewModel.noteText.observe(this){
             binding.noteTextView.text = it
@@ -50,7 +58,9 @@ class NoteDetailActivity: AppCompatActivity() {
     * */
     override fun onStart() {
         super.onStart()
+        viewModel.findNote(noteId)
         viewModel.setNoteText()
+
     }
 
     private fun goToNoteEditActivity(id: Int){

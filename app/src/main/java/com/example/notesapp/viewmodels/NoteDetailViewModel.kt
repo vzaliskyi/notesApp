@@ -1,49 +1,69 @@
 package com.example.notesapp.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.notesapp.data.NOTES_LIST
-import com.example.notesapp.data.Note
+import androidx.lifecycle.ViewModelProvider
+import com.example.notesapp.database.NoteDao
+import com.example.notesapp.database.entities.Note
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
-class NoteDetailViewModel:ViewModel() {
+class NoteDetailViewModel(private val dao: NoteDao):ViewModel() {
 
-    /* Live data should be declared during initialization of viewModel
-    * That's why I assign random note to _note variable
-    * Than in onCreate method in NoteDetailActivity I get noteId
-    * And invoke method assignNoteToMutableLiveDate to assign correct data
-    * */
-    var note: Note = NOTES_LIST[0]
+
+    private lateinit var note: Note
 
     private var _noteText: MutableLiveData<String> = MutableLiveData("")
     private var _isSelected: Boolean = false
 
-    val noteText: LiveData<String> = _noteText
+    val noteText: LiveData<String> get() = _noteText
     val isSelected: Boolean get() = _isSelected
 
 
 
-    private fun findNote(id: Int): Note{
-        val currentNote = NOTES_LIST.first { it.id == id }
-        _isSelected = currentNote.isSelected
-        return currentNote
+    fun findNote(id: Int){
+        runBlocking {
+            launch {
+                note = dao.getNote(id)
+                _isSelected = note.isSelected
+                _noteText.value = note.text
+            }
+
+        }
     }
 
-    fun assignNoteToMutableLiveData(id:Int){
-        note = findNote(id)
-    }
 
     fun setNoteText(){
-        _noteText.postValue(note.noteText)
+
+        _noteText.value = note.text
+        Log.d("MainActivity", "setNoteText was called. ${_noteText.value}")
     }
 
     fun deleteNote(){
-        NOTES_LIST.remove(note)
+        GlobalScope.launch {
+            dao.deleteNote(note)
+        }
     }
 
     fun selectNote(){
         _isSelected = !_isSelected
-        NOTES_LIST.first{it == note}.isSelected = isSelected
+        note.isSelected = _isSelected
+        GlobalScope.launch {
+            dao.insertNote(note)
+        }
     }
 
+}
+
+class NoteDetailModelFactory(private val dao: NoteDao): ViewModelProvider.Factory{
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(NoteDetailViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return NoteDetailViewModel(dao) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }
