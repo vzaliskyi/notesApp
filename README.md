@@ -25,16 +25,13 @@ App contains 3 activities: MainActivity, NoteDetailActivity, NoteEditActivity
 + click on cancelItem cancel changes and return to NoteDetailActivity or MainActivity(depend on activity which started NoteEditActivity)
 + click on saveItem save change and create new note if it didn't exist. As well as cancelItem return to NoteDetailActivity or MainActivity
 
-## Issue
-+ Text of notes in MainActivity doesn't update if it was edited
 
 ## Roadmap
 1. Possibility to add tags to note
-2. Add side menu in MainActivity
-3. Add filter by tags and select value
-4. Connect database to app
-5. Refactor code
-6. Polish UI/UX
+2. Add filter by tags and select value
+3. Refactor code
+4. Polish UI/UX
+5. Disable animation in listAdapter
 
 ## Screenshots
 <img src="https://github.com/vzaliskyi/notesApp/assets/78689702/d05512ec-a8d8-4d4e-a498-e0973af2bd0f" alt="MainActivity" width="250">
